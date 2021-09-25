@@ -35,7 +35,7 @@ export class UserService {
     return this._mapperService.map<User, UserDto>(user, new UserDto());
   }
 
-  async getAll(): Promise<UserDto> {
+  async getAll(): Promise<UserDto[]> {
     const users: User[] = await this._userRepository.find({
       where: { status: 'ACTIVE' },
     });
@@ -58,7 +58,7 @@ export class UserService {
     await this._userRepository.update(id, user);
   }
 
-  async delte(id: number): Promise<void> {
+  async delete(id: number): Promise<void> {
     const userExist = await this._userRepository.findOne(id, {
       where: { status: 'ACTIVE' },
     });
