@@ -10,6 +10,7 @@ import { getConnection, Repository } from 'typeorm';
 import { Role } from '../role/role.entity';
 import { RoleRepository } from '../role/role.repository';
 import { status } from '../../shared/entity-status.enum';
+import { RoleType } from '../role/roletype.enum';
 
 @Injectable()
 export class UserService {
@@ -46,7 +47,9 @@ export class UserService {
 
   async create(user: User): Promise<User> {
     const repo = await getConnection().getRepository(Role);
-    const defaultRole = await repo.findOne({ where: { name: 'GENERAL' } });
+    const defaultRole = await repo.findOne({
+      where: { name: RoleType.GENERAL },
+    });
     user.roles = [defaultRole];
 
     const savedUser: User = await this._userRepository.save(user);
@@ -66,7 +69,7 @@ export class UserService {
       throw new NotFoundException();
     }
 
-    await this._userRepository.update(id, { status: 'INACTIVE' });
+    await this._userRepository.update(id, { status: status.INACTIVE });
   }
 
   async setRoleToUser(userId: number, roleId: number) {
