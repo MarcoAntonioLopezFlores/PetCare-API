@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../role/decorators/role.decorator';
 import { RoleGuard } from '../role/guards/role.guard';
 import { RoleType } from '../role/roletype.enum';
-import { ReadUserDto, UpdateUserDto } from './dto';
+import { ReadUserDto, UpdateUserDto } from './dtos';
 import { UserService } from './user.service';
 
 @Controller('users')

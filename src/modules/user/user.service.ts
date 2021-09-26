@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { RoleRepository } from '../role/role.repository';
 import { status } from '../../shared/entity-status.enum';
-import { ReadUserDto, UpdateUserDto } from './dto';
+import { ReadUserDto, UpdateUserDto } from './dtos';
 import { plainToClass } from 'class-transformer';
 
 @Injectable()
@@ -53,8 +53,10 @@ export class UserService {
       throw new NotFoundException('This user does not exist');
     }
 
-    foundUser.name = user.name;
-    foundUser.lastname = user.lastname;
+    foundUser.details.age = user.details.age;
+    foundUser.details.lastname = user.details.lastname;
+    foundUser.details.name = user.details.name;
+    foundUser.details.phone = user.details.phone;
     const updatedUser = await this._userRepository.save(foundUser);
 
     return plainToClass(ReadUserDto, updatedUser);

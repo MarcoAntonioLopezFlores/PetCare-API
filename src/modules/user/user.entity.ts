@@ -6,21 +6,19 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Pet } from '../pet/pet.entity';
 import { Role } from '../role/role.entity';
+import { UserDetails } from './user.details.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
-
-  @Column({ type: 'varchar', nullable: false })
-  name: string;
-
-  @Column({ type: 'varchar', nullable: false })
-  lastname: string;
 
   @Column({ type: 'varchar', unique: true, nullable: false })
   email: string;
@@ -28,9 +26,20 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', nullable: false })
   password: string;
 
+  @OneToOne((type) => UserDetails, {
+    cascade: true,
+    nullable: false,
+    eager: true,
+  })
+  @JoinColumn({ name: 'detail_id' })
+  details: UserDetails;
+
   @ManyToMany((type) => Role, (role) => role.users, { eager: true })
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
+
+  @OneToMany(() => Pet, (pet) => pet.user)
+  pets: Pet[];
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 8 })
   status: string;
